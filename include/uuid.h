@@ -11,6 +11,7 @@
 #define __UUID_H__
 
 #include <linux/bitops.h>
+#include <linux/kconfig.h>
 
 /*
  * UUID - Universally Unique IDentifier - 128 bits unique number.
@@ -142,6 +143,22 @@ void gen_rand_uuid(unsigned char *uuid_bin);
  * @param          - uuid output type: UUID - 0, GUID - 1
  */
 void gen_rand_uuid_str(char *uuid_str, int str_format);
+
+#if IS_ENABLED(CONFIG_UUID_GEN_V5)
+/**
+ * gen_uuid_v5() - generate UUID v5 from namespace and other seed data.
+ *
+ * @namespace:   pointer to UUID namespace salt
+ * @uuid:        pointer to allocated UUID output
+ * @...:         NULL terminated list of seed data as pairs of pointers
+ *               to data and their lengths
+ */
+void gen_uuid_v5(const struct uuid *namespace, struct uuid *uuid, ...);
+#else
+static inline void gen_uuid_v5(const struct uuid *namespace, struct uuid *uuid, ...)
+{
+}
+#endif
 
 /**
  * uuid_str_to_le_bin() - Convert string UUID to little endian binary data.
