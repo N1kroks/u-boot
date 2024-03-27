@@ -9,7 +9,7 @@
 #ifndef __CONFIGS_SNAPDRAGON_H
 #define __CONFIGS_SNAPDRAGON_H
 
-#define CFG_SYS_BAUDRATE_TABLE	{ 115200, 230400, 460800, 921600 }
+#define CFG_SYS_BAUDRATE_TABLE	{ 115200, 230400, 460800, 921600, 3000000 }
 
 /* Load addressed are calculated during board_late_init(). See arm/mach-snapdragon/board.c */
 #define CFG_EXTRA_ENV_SETTINGS \
