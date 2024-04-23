@@ -449,6 +449,37 @@ practice. Getting this information from the firmware itself is more
 secure, assuming the firmware has been verified by a previous stage
 boot loader.
 
+The image_type_id contains a GUID value which is specific to the image
+and board being updated, that is to say it should uniquely identify the
+board model (and revision if relevant) and image pair. Traditionally,
+these GUIDs are generated manually and hardcoded on a per-board basis,
+however this scheme makes it difficult to scale up to support many
+boards.
+
+To address this, v5 GUIDs can be used to generate board-specific GUIDs
+at runtime, based on a set of persistent identifiable information:
+
+.. code-block:: c
+
+	/**
+	* efi_capsule_update_info_gen_ids - generate GUIDs for the images
+	*
+	* Generate the image_type_id for each image in the update_info.images array
+	* using the model and compatible strings from the device tree and a salt
+	* UUID defined at build time.
+	*
+	* Returns:		status code
+	*/
+	static efi_status_t efi_capsule_update_info_gen_ids(void);
+
+These strings are combined with the fw_image name to generate GUIDs for
+each image. Support for dynamic UUIDs can be enabled by turning on
+CONFIG_EFI_CAPSULE_DYNAMIC_UUIDS, generating a new namespace UUID and
+setting CONFIG_EFI_CAPSULE_NAMESPACE_UUID to it.
+
+The genguid tool can be used to determine the GUIDs for a particular board
+and image. It can be found in the tools directory.
+
 The firmware images structure defines the GUID values, image index
 values and the name of the images that are to be updated through
 the capsule update feature. These values are to be defined as part of
