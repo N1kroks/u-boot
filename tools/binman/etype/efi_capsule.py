@@ -24,7 +24,7 @@ def get_binman_test_guid(type_str):
         The actual GUID value (str)
     """
     TYPE_TO_GUID = {
-        'binman-test' : '09d7cf52-0720-4710-91d1-08469b7fe9c8'
+        'binman-test' : 'fd5db83c-12f3-a45b-9da9-e3007c7ff56e'
     }
 
     return TYPE_TO_GUID[type_str]
