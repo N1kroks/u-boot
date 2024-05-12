@@ -15,6 +15,7 @@ static const struct udevice_id nop_parent_ids[] = {
 	{ .compatible = "qcom,rpm-proc" },
 	{ .compatible = "qcom,glink-rpm" },
 	{ .compatible = "qcom,rpm-sm6115" },
+	{ .compatible = "qcom,rpmh-rsc" },
 	{ }
 };
 
@@ -50,6 +51,7 @@ static struct clk_ops stub_clk_ops = {
 
 static const struct udevice_id stub_clk_ids[] = {
 	{ .compatible = "qcom,rpmcc" },
+	{ .compatible = "qcom,sc7280-rpmh-clk" },
 	{ }
 };
 
