@@ -47,4 +47,6 @@ struct pte_smem_detect_state {
 
 int qcom_smem_detect(struct pte_smem_detect_state *state);
 
+void gunyah_init(void);
+
 #endif /* __QCOM_PRIV_H__ */
