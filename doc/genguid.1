@@ -1,0 +1,52 @@
+.\" SPDX-License-Identifier: GPL-2.0+
+.\" Copyright (c) 2024, Linaro Limited
+.TH GENGUID 1 "May 2024"
+
+.SH NAME
+genguid \- Generate deterministic EFI capsule image GUIDs for a board
+
+.SH SYNOPSIS
+.B genguid
+.RI GUID " " [ -vj ] " " -c " " COMPAT " " NAME...
+
+.SH "DESCRIPTION"
+The
+.B genguid
+command is used to determine the update image GUIDs for a board using
+dynamic UUIDs. The command takes a namespace GUID (defined in the boards
+defconfig), the boards first compatible string, and the names of the
+firmware images. The command will output the GUIDs for each image.
+
+As the dynamic UUID mechanism generates GUIDs at runtime, it would be
+necessary to actually boot U-Boot on the board and enable debug logs
+to retrieve the generated GUIDs. This tools just simplifies that process.
+
+.SH "OPTIONS"
+
+.TP
+.BI GUID
+The namespace/salt GUID, same as CONFIG_EFI_CAPSULE_NAMESPACE_UUID.
+The format is:
+    xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
+.TP
+.BI "-v\fR,\fB --verbose "
+Print additional information to stderr.
+
+.TP
+.BI "-j\fR,\fB --json "
+Output the results in JSON format (array of object with name/uuid properties).
+
+.TP
+.BI "-c\fR,\fB --compat " COMPAT
+The first entry in the boards root compatible property.
+
+.TP
+.BI NAME...
+The names of the firmware images to generate GUIDs for (e.g. "SANDBOX-UBOOT-ENV").
+
+.SH AUTHORS
+Written by Caleb Connolly <caleb.connolly@linaro.org>
+
+.SH HOMEPAGE
+https://u-boot.org

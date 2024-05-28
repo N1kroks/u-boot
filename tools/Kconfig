@@ -104,6 +104,13 @@ config TOOLS_MKEFICAPSULE
 	  optionally sign that file. If you want to enable UEFI capsule
 	  update feature on your target, you certainly need this.
 
+config TOOLS_GENGUID
+	bool "Build genguid command"
+	default y if EFI_CAPSULE_DYNAMIC_UUIDS
+	help
+	  This command allows users to generate the GUIDs that a given
+	  board would use for UEFI capsule update feature.
+
 menuconfig FSPI_CONF_HEADER
 	bool "FlexSPI Header Configuration"
 	help
