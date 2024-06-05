@@ -277,6 +277,16 @@ void protect_secure_region(void);
 void smp_kick_all_cpus(void);
 
 void flush_l3_cache(void);
+
+/**
+ * mmu_map_range() - map a region of previously unmapped memory
+ *
+ * @start: Start address of the region
+ * @size: Size of the region
+ * @attrs: Attributes to use for the mapping
+ * @emerg: Also map the region in the emergency table
+ */
+void mmu_map_region(phys_addr_t start, u64 size, u64 attrs, bool emerg);
 void mmu_change_region_attr(phys_addr_t start, size_t size, u64 attrs);
 
 /*
