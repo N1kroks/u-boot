@@ -388,7 +388,7 @@ void uuid_bin_to_str(const unsigned char *uuid_bin, char *uuid_str,
 	}
 }
 
-static void __maybe_unused configure_uuid(struct uuid *uuid, unsigned char version)
+static void configure_uuid(struct uuid *uuid, unsigned char version)
 {
 	uint16_t tmp;
 
