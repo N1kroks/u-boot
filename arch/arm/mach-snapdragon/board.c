@@ -179,7 +179,6 @@ void *board_fdt_blob_setup(int *err)
 
 	if (internal_valid) {
 		debug("Using built in FDT\n");
-		return (void *)gd->fdt_blob;
 	} else {
 		debug("Using external FDT\n");
 		/* We actually need to use this FDT to pre-emptively parse the memory
@@ -187,22 +186,24 @@ void *board_fdt_blob_setup(int *err)
 		 * assign gd->fdt_blob here. It gets overriden again anyway.
 		 */
 		gd->fdt_blob = fdt;
-		/* First we take the chance to parse the memory configuration */
-		qcom_parse_memory();
-		/* Then find the match for multi-dtb-fit stuff later */
-		fit_match = qcom_of_match(fdt);
-		/* If the external FDT contained match data then the initramfs should be
-		 * a FIT image containing the DTBs to pick from. We must set the FDT
-		 * to that so that U-Boot can operate on it.
-		 * We can still retrive the external dummy FDT with get_prev_bl_fdt_addr().
-		 */
-		if (fit_match) {
-			strncpy(of_match_name, fit_match, sizeof(of_match_name));
-			fdt = (void*)fdtdec_get_initrd_start_addr(fdt);
-			log_debug("using FIT %p\n", fdt);
-		}
-		return (void *)fdt;
 	}
+
+	/* First we take the chance to parse the memory configuration */
+	qcom_parse_memory();
+	/* Then find the match for multi-dtb-fit stuff later */
+	fit_match = qcom_of_match(fdt);
+	/* If the external FDT contained match data then the initramfs should be
+		* a FIT image containing the DTBs to pick from. We must set the FDT
+		* to that so that U-Boot can operate on it.
+		* We can still retrive the external dummy FDT with get_prev_bl_fdt_addr().
+		*/
+	if (fit_match) {
+		strncpy(of_match_name, fit_match, sizeof(of_match_name));
+		fdt = (void*)fdtdec_get_initrd_start_addr(fdt);
+		log_debug("using FIT %p\n", fdt);
+	}
+
+	return (void *)gd->fdt_blob;
 }
 
 /*
