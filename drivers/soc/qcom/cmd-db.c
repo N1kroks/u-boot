@@ -223,10 +223,30 @@ enum cmd_db_hw_type cmd_db_read_slave_id(const char *id)
 }
 EXPORT_SYMBOL(cmd_db_read_slave_id);
 
-int cmd_db_init(ofnode node)
+int cmd_db_init(void)
 {
 	void __iomem *base;
+	ofnode rmem, node;
 
+	printf("%s: %p\n", __func__, cmd_db_header);
+
+	if (cmd_db_header)
+		return 0;
+
+	/*
+	 * Even though RPMh doesn't directly use cmd-db, all of its children
+	 * do. We init cmd-db here or bail out if we can't. All child devices
+	 * can therefore safely assume that cmd-db is available.
+	 */
+	rmem = ofnode_path("/reserved-memory");
+	ofnode_for_each_subnode(node, rmem) {
+		if (ofnode_device_is_compatible(node, "qcom,cmd-db"))
+			goto found;
+	}
+
+	printf("%s: Failed to find cmd-db node\n", __func__);
+	return -ENOENT;
+found:
 	debug("%s(%s)\n", __func__, ofnode_get_name(node));
 
 	base = (void __iomem *)ofnode_get_addr(node);

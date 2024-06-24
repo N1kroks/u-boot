@@ -24,7 +24,7 @@ const void *cmd_db_read_aux_data(const char *resource_id, size_t *len);
 
 enum cmd_db_hw_type cmd_db_read_slave_id(const char *resource_id);
 
-int cmd_db_init(ofnode node);
+int cmd_db_init(void);
 
 #else
 static inline u32 cmd_db_read_addr(const char *resource_id)

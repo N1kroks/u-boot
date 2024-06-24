@@ -521,34 +521,26 @@ static int rpmh_probe_tcs_config(struct udevice *dev, struct rsc_drv *drv)
 	return 0;
 }
 
+static int rpmh_rsc_bind(struct udevice *dev)
+{
+	int ret;
+
+	printf("RPMh: %s\n", dev->name);
+
+	ret = cmd_db_init();
+	if (ret)
+		return ret;
+
+	return dm_scan_fdt_dev(dev);
+}
+
 static int rpmh_rsc_probe(struct udevice *dev)
 {
 	ofnode dn = dev_ofnode(dev);
-	ofnode rmem, node;
 	struct rsc_drv *drv;
 	char drv_id[10] = {0};
 	int ret;
 	u32 rsc_id;
-
-	/*
-	 * Even though RPMh doesn't directly use cmd-db, all of its children
-	 * do. We init cmd-db here or bail out if we can't. All child devices
-	 * can therefore safely assume that cmd-db is available.
-	 */
-	rmem = ofnode_path("/reserved-memory");
-	ofnode_for_each_subnode(node, rmem) {
-		if (ofnode_device_is_compatible(node, "qcom,cmd-db"))
-			goto found;
-	}
-
-	printf("Couldn't find qcom,cmd-db node!\n");
-	return -ENODEV;
-found:
-	ret = cmd_db_init(node);
-	if (ret < 0) {
-		printf("Couldn't init cmd-db!\n");
-		return ret;
-	}
 
 	drv = dev_get_priv(dev);
 
@@ -612,7 +604,7 @@ U_BOOT_DRIVER(qcom_rpmh_rsc) = {
 	.id		= UCLASS_MISC,
 	.priv_auto	= sizeof(struct rsc_drv),
 	.probe		= rpmh_rsc_probe,
-	.bind		= dm_scan_fdt_dev,
+	.bind		= rpmh_rsc_bind,
 	.of_match	= qcom_rpmh_ids,
 	/* rpmh is under CLUSTER_PD which we don't support */
 	.flags		= DM_FLAG_DEFAULT_PD_CTRL_OFF,
