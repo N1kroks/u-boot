@@ -125,7 +125,7 @@ static void qcom_parse_memory(void)
 	if (memsize / sizeof(u64) > ARRAY_SIZE(prevbl_ddr_banks))
 		log_err("Provided more than the max of %lu memory banks\n", ARRAY_SIZE(prevbl_ddr_banks));
 	for (i = 0; i < min(memsize / sizeof(u64), ARRAY_SIZE(prevbl_ddr_banks)); i++) {
-		printf("memory[%d] = %llx\n", i, get_unaligned_be64(&memory[i]));
+		log_debug("memory[%d] = %llx\n", i, get_unaligned_be64(&memory[i]));
 		prevbl_ddr_banks[i] = get_unaligned_be64(&memory[i]);
 		if (i % 2 == 1)
 			ram_end = max(ram_end, prevbl_ddr_banks[i-1] + prevbl_ddr_banks[i]);
