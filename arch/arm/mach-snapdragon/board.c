@@ -75,7 +75,7 @@ static int qcom_prevbl_configure_bi_dram(void)
 {
 	int i = 0;
 
-	for (i = 0; i < min((ulong)CONFIG_NR_DRAM_BANKS, ARRAY_SIZE(prevbl_ddr_banks)); i += 2) {
+	for (i = 0; i < min((ulong)CONFIG_NR_DRAM_BANKS, ARRAY_SIZE(prevbl_ddr_banks)) * 2; i += 2) {
 		gd->bd->bi_dram[i/2].start = prevbl_ddr_banks[i];
 		gd->bd->bi_dram[i/2].size = prevbl_ddr_banks[i + 1];
 	}
