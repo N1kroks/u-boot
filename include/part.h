@@ -725,6 +725,8 @@ int part_get_type_by_name(const char *name);
  */
 int part_get_bootable(struct blk_desc *desc);
 
+struct udevice *part_get_by_guid(const char *guid, struct disk_partition **info);
+
 #else
 static inline int part_driver_get_count(void)
 { return 0; }
