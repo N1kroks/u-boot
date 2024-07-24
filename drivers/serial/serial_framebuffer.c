@@ -20,6 +20,7 @@ DECLARE_GLOBAL_DATA_PTR;
 
 struct framebuffer_serial_data {
     phys_addr_t base;
+    phys_size_t size;
 };
 
 int curr_x = 0;
@@ -87,6 +88,8 @@ static void fb_putc(struct udevice *dev, const char c) {
     } else {
         curr_x++;
     }
+
+    flush_dcache_range((ulong)priv->base, ALIGN((ulong)priv->base + priv->size, CONFIG_SYS_CACHELINE_SIZE));
 	return;
 }
 
@@ -99,10 +102,13 @@ static int framebuffer_serial_putc(struct udevice *dev, const char ch)
 static int framebuffer_serial_ofdata_to_platdata(struct udevice *dev)
 {
 	struct framebuffer_serial_data *priv = dev_get_priv(dev);
+	fdt_size_t size;
 
-	priv->base = dev_read_addr(dev);
+	priv->base = dev_read_addr_size(dev, &size);
 	if (priv->base == FDT_ADDR_T_NONE)
 		return -EINVAL;
+
+    priv->size = size;
 
 	return 0;
 }
@@ -132,7 +138,8 @@ U_BOOT_DRIVER(serial_framebuffer) = {
 #ifdef CONFIG_DEBUG_UART_FRAMEBUFFER
 
 static struct framebuffer_serial_data init_serial_data = {
-	.base = CONFIG_VAL(DEBUG_UART_BASE)
+	.base = CONFIG_VAL(DEBUG_UART_BASE),
+    .size = (SCREEN_WIDTH * SCREEN_HEIGHT * 4)
 };
 
 /* Serial dumb device, to reuse driver code */
