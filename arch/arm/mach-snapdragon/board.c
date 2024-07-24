@@ -162,6 +162,7 @@ int board_fit_config_name_match(const char *name)
 void *board_fdt_blob_setup(int *err)
 {
 	struct fdt_header *fdt;
+	struct fdt_header *orig_fdt;
 	bool internal_valid, external_valid;
 	const char *fit_match;
 
@@ -188,8 +189,13 @@ void *board_fdt_blob_setup(int *err)
 		gd->fdt_blob = fdt;
 	}
 
+	orig_fdt = gd->fdt_blob;
+
+	if(internal_valid && external_valid) 
+		gd->fdt_blob = fdt;
 	/* First we take the chance to parse the memory configuration */
 	qcom_parse_memory();
+	gd->fdt_blob = orig_fdt;
 	/* Then find the match for multi-dtb-fit stuff later */
 	fit_match = qcom_of_match(fdt);
 	/* If the external FDT contained match data then the initramfs should be
