@@ -21,10 +21,16 @@
 
 	qcom,msm-id = <QCOM_ID_SM7125 0>;
 
+	aliases {
+		serial0 = &uart8;
+	};
+
 	chosen {
 		#address-cells = <2>;
 		#size-cells = <2>;
 		ranges;
+
+		stdout-path = "serial0:115200n8";
 
 		framebuffer@9c000000 {
 			compatible = "simple-framebuffer";
@@ -408,6 +414,16 @@
 			drive-strength = <2>;
 		};
 	};
+};
+
+&qupv3_id_1 {
+	status = "okay";
+};
+
+&uart8 {
+	status = "okay";
+	/delete-property/ pinctrl-names; // hack
+	/delete-property/ pinctrl-0; // hack
 };
 
 &ufs_mem_hc {
