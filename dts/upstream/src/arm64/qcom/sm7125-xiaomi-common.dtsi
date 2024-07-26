@@ -448,18 +448,14 @@
 &usb_1_dwc3 {
 	dr_mode = "peripheral";
 	maximum-speed = "high-speed";
-	status = "okay";
+	/* Remove USB3 phy */
+	phys = <&usb_1_hsphy>;
+	phy-names = "usb2-phy";
 };
 
 &usb_1_hsphy {
 	vdd-supply = <&vreg_l4a_0p88>;
 	vdda-phy-dpdm-supply = <&vreg_l17a_3p1>;
 	vdda-pll-supply = <&vreg_l11a_1p8>;
-	status = "okay";
-};
-
-&usb_1_qmpphy {
-	vdda-phy-supply = <&vreg_l4a_0p88>;
-	vdda-pll-supply = <&vreg_l3c_1p23>;
 	status = "okay";
 };
